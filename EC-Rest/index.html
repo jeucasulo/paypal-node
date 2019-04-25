@@ -1,0 +1,85 @@
+<html>
+<body>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+<!--<script src="https://www.paypal.com/sdk/js?client-id=sb"></script>-->
+<script src="https://www.paypal.com/sdk/js?client-id=AdYLZtwY8zHLgVLR7uawFMLHXWT-jswUL0jnyZJAIfjjYzsWfR9mxHhKQaAcDR409oZmujTDAh207JJI"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<div class="container">
+     <div class="row">
+         <div class="col">
+            
+             <!-- paypalbutton -->
+             <h1 class="text-center"><div id="paypal-button-container"></div></h1>
+
+         </div>
+     </div>
+</div>
+<button id="myButton">Button</button>
+<script>
+  paypal.Buttons({
+    createOrder: function() {
+    //   return fetch('/my-server/create-paypal-transaction')
+    //   return fetch('/EC-V2/script.php')
+    //   return fetch('./create-order.js')
+      return fetch('EC-V2/create-order.js')
+        .then(function(res) {
+        //   return res.json();
+        }).then(function(data) {
+        //   console.log(data);
+        //   return data.result.id;
+        });
+    },
+        // Finalize the transaction
+    onApprove: function(data, actions) {
+        console.log(data);
+        return fetch('/capture/order/' + data.orderID, {
+            // method: 'post'
+            method: 'get'
+        }).then(function(res) {
+            return res.json();
+        }).then(function(details) {
+            // Show a success message to the buyer
+            alert('Transaction completed by ' + details.result.payer.name.given_name + '!');
+        });
+    }
+  }).render('#paypal-button-container');
+  
+  
+  
+  
+  
+  
+  
+  
+  $('#myButton').click(function(){
+    console.log("---------------------------------Create Payment---------------------------------");
+    $.ajax({
+    // url: "execute-payment.php",// localhost
+    url: "./create-order.js",// cloud9
+    // url: "/create-payment.php",// cloud9
+    type: "GET",
+    dataType: "json", //error dataType since the callback response isnt a json
+        // timeout: 10000, //error timeout when it delays
+        // data: JSON.stringify(reqs),
+        // data: { "payer_id": payerID },
+    }).done(function(data, textStatus, jqxhr) {
+        console.log("---------------------------------data---------------------------------");
+        console.log(data);
+        console.log("App.CreatePayment.Done");
+    }).fail(function(jqxhr, textStatus, errorThrown) {
+        console.log(jqxhr);
+        console.log(textStatus);
+        // console.log(errorThrown);
+        console.log("App.CreatePayment.Fail");
+    });
+ });
+  
+  
+</script>
+
+</div>
+</body>
+</html>

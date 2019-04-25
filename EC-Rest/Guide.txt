@@ -1,0 +1,141 @@
+update node on c9 (set the version)
+nvm install 10.15.3
+
+--------NOTES APP--------
+npm init creates a package.json file
+npm init
+npm init -y creates a package.json with default values so you dont have to configure it
+
+
+validator.js module (with lowercase)
+npm i validator@10.8.0
+
+you cant edit the node_module file since it will always be rewrited 
+on updates or new nodules install
+
+node_module loads all the modules the app are requiring, 
+since you delete this folder the modules wont work anymore
+"em vista de se ter os modulos funcinoando novamente" 
+you need to run the npm install that will read the 'depencies' property
+from package.json file and install each one of them
+
+chalk.js module
+color the console logs
+npm i chalk@2.4.1
+
+nodemon runs the code on terminal when file is saved
+npm install -g nodemon
+
+"-g" install it globally
+you can either install it locally so only the prject will run it
+
+note: modules installed in "global" will not be put in the
+"dependencies" from package.json, so when another person use
+the app, it will not be installed automaticly.
+The solution is install NODEMON LOCALLY
+
+npm install nodemon@1.2.0
+npm install nodemon@1.2.0 --save-dev (make it a depency for dev only)
+dev dependencies will not be installed in production, cause you
+only need int he local machine while in devlopment, in heroku it will 
+be not installed
+
+npm uninstall -g nodemon
+
+--------IO APP--------
+
+yargs helps parsing the flags on terminal
+node myApp.js --flag1='hello' --flag2='test'
+npm i yargs@12.0.2
+
+
+--------WEBSERVER--------
+
+express
+npm i express@4.16.4
+npm i express@4.16.4 --save
+
+
+handlebars
+hbs - hbs is a pack that uses handlebars with express 
+npm i hbs@4.0.1
+
+in order to update the partials news file we have to run the -e js,hbs
+nodemon src/app.js -e js,hbs
+-e = extension
+
+--------GIT AND HEROKU--------
+check if the ssh exists already
+
+ls -a -l ~/.ssh
+
+ls : show all directories
+-a : show hidden
+-l : show at a list format
+~/.ssh : finds the ssh file
+
+
+create a ssh file
+1-ssh-keygen -t rsa -b 4096 -C "jeucasulo@hotmail.com"
+
+ssh-keygen : gerenates the ssh
+-t : type (there are many protocols, we will use rsa)
+-b : bits size
+-C : comment as label
+
+
+2-response:"Enter file in which to save the key (/home/ec2-user/.ssh/id_rsa):"
+now just enter Enter Key in order to use the default parth
+
+3-enter a passphrase, enter Enter Key for no passphrase
+
+4-now we have the id_rsa and id_rsa.pub files
+
+5-now you need to run the ssh agent
+win: eval $(ssh-agent -s)
+lin: eval "$(ssh-agent -s)"
+mac: eval "$(ssh-agent -s)"
+
+it will return the agend pid (Agent pid 7749)
+
+6-now lets register the ssh file
+mac: ssh-add -K ~/.ssh/id_rsa
+win: ssh-add ~/.ssh/id_rsa
+lin: ssh-add ~/.ssh/id_rsa
+
+response: Identity added: /home/ec2-user/.ssh/id_rsa (/home/ec2-user/.ssh/id_rsa)
+
+now the local ssh is alrady assigned and ready to use, we only need
+to register that on the github server or another server
+
+1-https://github.com/settings/keys
+
+2-click on New SSH Keys and set the Name (home desk, work notebook etc)
+now you need to get the pubSSHkey values
+
+3-cat ~/.ssh/id_rsa.pub
+
+4-copy the whole ssh pub string and paste it on github website
+
+5-in order to test it, type: ssh -T git@github.com
+it will anwser a connection cant be establish, type Yes and hit Enter
+it will say it is ok but github doesnt provide shell access
+
+6-now you just need to push
+
+
+--------DEPLOY TO HEROKU--------
+1-in the package.json file, remove the "test" and set the "start"
+  "scripts": {
+    "start":"node src/app.js"
+  },
+now if you run: "npm run start" it will run the app as well
+
+2-in the app.js file, just below "const app = express()" type:
+const port = process.env.PORT || 3000;
+
+3-now you set already the port value, pass it as parameter on app.listen
+
+4-dont forget to change the "local paths" to "heroku paths"
+
+5-now add, commit and push to git, then deploy it on heroku

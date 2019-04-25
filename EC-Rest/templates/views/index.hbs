@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Index</title>
+        <link rel="icon" href="/img/weather.png" />
+        <!--<link rel="stylesheet" href="./css/styles.css" type="text/css" />-->
+        <link rel="stylesheet" href="/css/styles.css" type="text/css" />
+        
+    </head>
+    <body>
+        <div class="main-content">
+            {{>header}}    
+            {{!--<p>Use this site to get your weather!</p>--}}
+            {{!--<form>--}}
+            {{!--    <input placeholder='Insert a location' />--}}
+                
+            {{!--    <button>--}}
+            {{!--        Search    --}}
+            {{!--    </button>--}}
+            {{!--</form>--}}
+            {{!--<p id="message-one"></p>--}}
+            {{!--<p id="message-two"></p>--}}
+            
+            <script src="https://www.paypalobjects.com/api/checkout.js"></script>
+
+            <div id="paypal-button"></div>
+            
+            <script>
+              paypal.Button.render({
+                env: 'sandbox', // Or 'production'
+                // Set up the payment:
+                // 1. Add a payment callback
+                payment: function(data, actions) {
+                  // 2. Make a request to your server
+                  return actions.request.post('/create-payment')
+                    .then(function(res) {
+                      // 3. Return res.id from the response
+                      console.log(res);
+                      return res.body.id;
+                    });
+                },
+                // Execute the payment:
+                // 1. Add an onAuthorize callback
+                onAuthorize: function(data, actions) {
+                  console.log('---------------------onAuthorize-------------------');
+                  console.log(data);
+                  console.log(data.paymentID);
+                  console.log(data.payerID);
+                  
+                  // 2. Make a request to your server
+                  return actions.request.post('/execute-payment', {
+                    paymentID: data.paymentID,
+                    payerID:   data.payerID
+                  })
+                    .then(function(res) {
+                      // 3. Show the buyer a confirmation message.
+                      console.log('---------------// 3. Show the buyer a confirmation message.-------------');
+                      console.log(res);
+                    });
+                }
+              }, '#paypal-button');
+            </script>
+
+            
+        </div>
+        
+        {{>footer}}
+
+    {{!--need to be after the html FORM and elements--}}
+    <script type="text/javascript" src="/js/app.js"></script>
+    </body>
+    
+</html>
+

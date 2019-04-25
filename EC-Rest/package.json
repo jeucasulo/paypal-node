@@ -1,0 +1,19 @@
+{
+  "name": "ec-rest",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon src/app.js -e js,hbs"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^1.2.0"
+  },
+  "dependencies": {
+    "express": "^4.16.4",
+    "hbs": "^4.0.1"
+  }
+}
